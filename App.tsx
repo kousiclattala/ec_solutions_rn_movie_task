@@ -1,17 +1,19 @@
-import {View, Text} from 'react-native';
 import React, {useEffect} from 'react';
+import {View, Text} from 'react-native';
 import RNBootSplash from 'react-native-bootsplash';
-import Login from './src/screens/login/Login';
 import {PaperProvider} from 'react-native-paper';
+import TabNavigator from './src/navigators/TabNavigator';
+import {NavigationContainer} from '@react-navigation/native';
 
 const App = () => {
-  useEffect(() => {
-    RNBootSplash.hide();
-  }, []);
-
   return (
     <PaperProvider>
-      <Login />
+      <NavigationContainer
+        onReady={() => {
+          RNBootSplash.hide();
+        }}>
+        <TabNavigator />
+      </NavigationContainer>
     </PaperProvider>
   );
 };
