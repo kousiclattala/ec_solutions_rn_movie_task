@@ -5,6 +5,7 @@ import {
   Image,
   Pressable,
   StyleSheet,
+  ScrollView,
 } from 'react-native';
 import React, {useState} from 'react';
 import resources from '../../resources';
@@ -24,71 +25,73 @@ const Login = () => {
         flex: 1,
         backgroundColor: resources.colors.background,
       }}>
-      <View
-        style={{
-          flex: 1,
-        }}>
-        <Image source={resources.images.logo} style={styles.image} />
+      <ScrollView>
+        <View
+          style={{
+            flex: 1,
+          }}>
+          <Image source={resources.images.logo} style={styles.image} />
 
-        <View style={styles.optionContainer}>
-          <Pressable
-            style={[
-              styles.option,
-              {
-                backgroundColor:
-                  selected == 'login'
-                    ? resources.colors.primary
-                    : 'transparent',
-              },
-            ]}
-            onPress={() => {
-              setSelected('login');
-            }}>
-            <Text
+          <View style={styles.optionContainer}>
+            <Pressable
               style={[
-                styles.optionText,
+                styles.option,
                 {
-                  color:
+                  backgroundColor:
                     selected == 'login'
-                      ? resources.colors.white
-                      : resources.colors.primary,
-                  opacity: selected == 'login' ? 1 : 0.35,
+                      ? resources.colors.primary
+                      : 'transparent',
                 },
-              ]}>
-              Login
-            </Text>
-          </Pressable>
-          <Pressable
-            style={[
-              styles.option,
-              {
-                backgroundColor:
-                  selected == 'register'
-                    ? resources.colors.primary
-                    : 'transparent',
-              },
-            ]}
-            onPress={() => {
-              setSelected('register');
-            }}>
-            <Text
+              ]}
+              onPress={() => {
+                setSelected('login');
+              }}>
+              <Text
+                style={[
+                  styles.optionText,
+                  {
+                    color:
+                      selected == 'login'
+                        ? resources.colors.white
+                        : resources.colors.primary,
+                    opacity: selected == 'login' ? 1 : 0.35,
+                  },
+                ]}>
+                Login
+              </Text>
+            </Pressable>
+            <Pressable
               style={[
-                styles.optionText,
+                styles.option,
                 {
-                  color:
+                  backgroundColor:
                     selected == 'register'
-                      ? resources.colors.white
-                      : resources.colors.primary,
-                  opacity: selected == 'register' ? 1 : 0.35,
+                      ? resources.colors.primary
+                      : 'transparent',
                 },
-              ]}>
-              Register
-            </Text>
-          </Pressable>
-        </View>
+              ]}
+              onPress={() => {
+                setSelected('register');
+              }}>
+              <Text
+                style={[
+                  styles.optionText,
+                  {
+                    color:
+                      selected == 'register'
+                        ? resources.colors.white
+                        : resources.colors.primary,
+                    opacity: selected == 'register' ? 1 : 0.35,
+                  },
+                ]}>
+                Register
+              </Text>
+            </Pressable>
+          </View>
 
-        {selected == 'login' ? <Signin /> : <Signup />}
-      </View>
+          {selected == 'login' ? <Signin /> : <Signup />}
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

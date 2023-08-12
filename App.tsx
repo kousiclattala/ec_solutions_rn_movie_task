@@ -4,17 +4,19 @@ import RNBootSplash from 'react-native-bootsplash';
 import {PaperProvider} from 'react-native-paper';
 import TabNavigator from './src/navigators/TabNavigator';
 import {NavigationContainer} from '@react-navigation/native';
+import StackNavigator from './src/navigators/StackNavigator';
+import {Provider} from 'react-redux';
+import {store} from './src/redux/store';
 
 const App = () => {
   return (
-    <PaperProvider>
-      <NavigationContainer
-        onReady={() => {
-          RNBootSplash.hide();
-        }}>
-        <TabNavigator />
-      </NavigationContainer>
-    </PaperProvider>
+    <Provider store={store}>
+      <PaperProvider>
+        <NavigationContainer>
+          <StackNavigator />
+        </NavigationContainer>
+      </PaperProvider>
+    </Provider>
   );
 };
 

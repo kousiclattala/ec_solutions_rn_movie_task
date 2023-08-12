@@ -10,6 +10,7 @@ export type TextInputBoxProps = {
 export type TrendingRenderProps = {
   item: any;
   index: number;
+  onPress: () => void;
 };
 
 export type WatchListRenderProps = {

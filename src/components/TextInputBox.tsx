@@ -34,6 +34,7 @@ const TextInputBox: React.FC<TextInputBoxProps> = ({
         value={value}
         onChangeText={onChangeText}
         secureTextEntry={isSecure}
+        maxLength={placeholder == 'Phone number' ? 10 : undefined}
         style={{
           width: wp('90%'),
           height: hp('7%'),
@@ -43,6 +44,7 @@ const TextInputBox: React.FC<TextInputBoxProps> = ({
           marginTop: hp('2%'),
           borderWidth: 1,
           borderColor: isError ? resources.colors.red : resources.colors.shadow,
+          color: resources.colors.black,
         }}
       />
     </View>

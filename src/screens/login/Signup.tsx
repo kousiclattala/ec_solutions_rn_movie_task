@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   Pressable,
   StyleSheet,
   ScrollView,
+  BackHandler,
 } from 'react-native';
 import resources from '../../resources';
 import {
@@ -13,8 +14,17 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import TextInputBox from '../../components/TextInputBox';
+import {setIsUserLogged, setUserDataToAsync} from '../../helpers/AsyncHelper';
+import {setIsLoggedIn, setUserData} from '../../redux/authSlice';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {compositeProps} from '../../navigators/types';
+import {useAppDispatch} from '../../redux/hooks';
+import {emailValidation, passwordValidator} from '../../helpers/Helpers';
 
 const Signup = () => {
+  const navigation = useNavigation<compositeProps>();
+  const dispatch = useAppDispatch();
+
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -26,6 +36,23 @@ const Signup = () => {
   const [passError, setPassError] = useState(false);
   const [confError, setConfError] = useState(false);
   const [phoneError, setPhoneError] = useState(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      const backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        () => {
+          navigation.navigate('Home');
+
+          return true;
+        },
+      );
+
+      return () => {
+        backHandler.remove();
+      };
+    }, []),
+  );
 
   const _validateFields = () => {
     var isUserNameValid = username.length > 0 ? true : false;
@@ -46,6 +73,8 @@ const Signup = () => {
       setPassError(false);
       setConfError(false);
       setPhoneError(false);
+
+      handleSignup();
     } else {
       setUserNameError(!isUserNameValid);
       setEmailError(!isEmailValid);
@@ -53,6 +82,22 @@ const Signup = () => {
       setConfError(!isConfValid);
       setPhoneError(!isPhoneValid);
     }
+  };
+
+  const handleSignup = () => {
+    const data = {
+      userName: username,
+      password: password,
+      email: email,
+      phoneNumber: phoneNumber,
+    };
+
+    setIsUserLogged();
+    setUserDataToAsync(data);
+    dispatch(setIsLoggedIn(true));
+    dispatch(setUserData(data));
+
+    navigation.navigate('Home');
   };
 
   return (
@@ -66,53 +111,130 @@ const Signup = () => {
           label="Username"
           placeholder="Username"
           value={username}
-          onChangeText={val => setUsername(val)}
+          onChangeText={val => {
+            setUsername(val);
+
+            if (val.length < 3) {
+              setUserNameError(true);
+            } else {
+              setUserNameError(false);
+            }
+          }}
           isError={userNameError}
           isSecure={false}
         />
-        {userNameError && (
+        {userNameError && username.length == 0 && (
           <Text style={styles.errorText}>Please enter value</Text>
+        )}
+        {userNameError && username.length > 0 && username.length < 3 && (
+          <Text style={styles.errorText}>
+            Username must be 3 characters long
+          </Text>
         )}
 
         <TextInputBox
           label="Email"
           placeholder="Email"
           value={email}
-          onChangeText={val => setEmail(val)}
+          onChangeText={val => {
+            setEmail(val);
+
+            if (emailValidation(val) == false) {
+              setEmailError(true);
+            } else {
+              setEmailError(false);
+            }
+          }}
           isError={emailError}
           isSecure={false}
         />
-        {emailError && <Text style={styles.errorText}>Please enter value</Text>}
+        {emailError && email.length == 0 && (
+          <Text style={styles.errorText}>Please enter value</Text>
+        )}
+        {emailError && email.length > 0 && emailValidation(email) == false && (
+          <Text style={styles.errorText}>Please enter valid email</Text>
+        )}
 
         <TextInputBox
           label="Password"
           placeholder="Password"
           value={password}
-          onChangeText={val => setPassword(val)}
+          onChangeText={val => {
+            setPassword(val);
+
+            if (passwordValidator(val) == false) {
+              setPassError(true);
+            } else {
+              setPassError(false);
+            }
+          }}
           isError={passError}
           isSecure={true}
         />
-        {passError && <Text style={styles.errorText}>Please enter value</Text>}
+        {passError && password.length == 0 && (
+          <Text style={styles.errorText}>Please enter value</Text>
+        )}
+        {passError &&
+          password.length > 0 &&
+          passwordValidator(password) == false && (
+            <Text style={styles.errorText}>
+              Password must contain 6 characters, one Uppercase letter, one
+              Lowercase letter, one Special Character, one number
+            </Text>
+          )}
 
         <TextInputBox
           label="Confirm Password"
           placeholder="Confirm Password"
           value={confirmPassword}
-          onChangeText={val => setConfirmPassword(val)}
+          onChangeText={val => {
+            setConfirmPassword(val);
+
+            if (passwordValidator(val) == false) {
+              setConfError(true);
+            } else {
+              setConfError(false);
+            }
+          }}
           isError={confError}
           isSecure={true}
         />
-        {confError && <Text style={styles.errorText}>Please enter value</Text>}
+        {confError && confirmPassword.length == 0 && (
+          <Text style={styles.errorText}>Please enter value</Text>
+        )}
+        {confError &&
+          confirmPassword.length > 0 &&
+          passwordValidator(confirmPassword) == false && (
+            <Text style={styles.errorText}>
+              Password must contain 6 characters, one Uppercase letter, one
+              Lowercase letter, one Special Character, one number
+            </Text>
+          )}
 
         <TextInputBox
           label="Phone number"
           placeholder="Phone number"
           value={phoneNumber}
-          onChangeText={val => setPhoneNumber(val)}
+          onChangeText={val => {
+            setPhoneNumber(val);
+
+            if (val.length < 10) {
+              setPhoneError(true);
+            } else {
+              setPhoneError(false);
+            }
+          }}
           isError={phoneError}
           isSecure={false}
         />
-        {phoneError && <Text style={styles.errorText}>Please enter value</Text>}
+        {phoneError && phoneNumber.length == 0 && (
+          <Text style={styles.errorText}>Please enter value</Text>
+        )}
+        {phoneError && phoneNumber.length > 0 && phoneNumber.length < 10 && (
+          <Text style={styles.errorText}>
+            Phone number must contain 10 characters
+          </Text>
+        )}
 
         <Pressable style={styles.loginBtn} onPress={_validateFields}>
           <Text style={styles.btnText}>Register</Text>

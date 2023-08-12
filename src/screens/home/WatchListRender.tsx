@@ -1,4 +1,4 @@
-import {View, Text} from 'react-native';
+import {View, Text, Image, Dimensions} from 'react-native';
 import React from 'react';
 import {WatchListRenderProps} from '../../types/types';
 import {
@@ -7,18 +7,28 @@ import {
 } from 'react-native-responsive-screen';
 import resources from '../../resources';
 
+const {width: SCREEN_WIDTH, height: SCREEN_HEIGHT} = Dimensions.get('screen');
+
 const WatchListRender: React.FC<WatchListRenderProps> = ({item, index}) => {
+  // console.log('watchlist', item);
+
   return (
-    <View>
-      <View
-        key={index}
+    <View
+      style={{
+        width: wp('40%'),
+        height: hp('40%'),
+        marginRight: SCREEN_WIDTH > 400 ? wp('2%') : wp('7%'),
+      }}
+      key={item.id}>
+      <Image
+        source={{uri: `${resources.config.posterURL}${item?.poster_path}`}}
         style={{
-          width: wp('40%'),
-          height: hp('30%'),
-          backgroundColor: resources.colors.white,
+          width: 165,
+          height: 245,
           borderRadius: 10,
-          marginRight: wp('4%'),
-        }}></View>
+          resizeMode: 'contain',
+        }}
+      />
       <Text
         style={{
           color: resources.colors.primary,
@@ -28,7 +38,7 @@ const WatchListRender: React.FC<WatchListRenderProps> = ({item, index}) => {
           marginTop: hp('1%'),
           alignSelf: 'center',
         }}>
-        Movie
+        {item?.title}
       </Text>
     </View>
   );

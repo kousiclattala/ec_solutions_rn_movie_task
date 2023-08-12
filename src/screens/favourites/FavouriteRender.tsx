@@ -1,4 +1,4 @@
-import {View, Text} from 'react-native';
+import {View, Text, Image} from 'react-native';
 import React from 'react';
 import {FavouriteRenderProps, TrendingRenderProps} from '../../types/types';
 import {
@@ -11,17 +11,21 @@ const FavouriteRender: React.FC<FavouriteRenderProps> = ({item, index}) => {
   return (
     <View
       style={{
-        marginHorizontal: wp('2.5%'),
+        marginHorizontal: wp('2.3%'),
         marginBottom: hp('2%'),
-      }}>
-      <View
-        key={index}
+        width: wp('45%'),
+      }}
+      key={item.id}>
+      <Image
+        source={{uri: `${resources.config.posterURL}${item?.poster_path}`}}
         style={{
-          width: wp('45%'),
-          height: hp('30%'),
-          backgroundColor: resources.colors.white,
+          width: 160,
+          height: 245,
           borderRadius: 10,
-        }}></View>
+          resizeMode: 'contain',
+        }}
+      />
+
       <Text
         style={{
           color: resources.colors.primary,
@@ -30,8 +34,10 @@ const FavouriteRender: React.FC<FavouriteRenderProps> = ({item, index}) => {
           letterSpacing: 0.6,
           marginTop: hp('1%'),
           alignSelf: 'center',
-        }}>
-        Movie
+          overflow: 'hidden',
+        }}
+        numberOfLines={2}>
+        {item?.title}
       </Text>
     </View>
   );

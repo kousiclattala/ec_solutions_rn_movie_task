@@ -10,3 +10,16 @@ export const getIconName = (key: string, isFocused: boolean) => {
       break;
   }
 };
+
+export const emailValidation = (email: string) => {
+  const exp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+
+  return exp.test(email);
+};
+
+export const passwordValidator = (password: string) => {
+  const exp =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+
+  return exp.test(password);
+};

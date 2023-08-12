@@ -7,12 +7,15 @@ import {
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import FAIcon from 'react-native-vector-icons/FontAwesome';
 import resources from '../resources';
+import {useAppSelector} from '../redux/hooks';
 
 const BottomBar: React.FC<BottomTabBarProps> = ({
   state,
   descriptors,
   navigation,
 }) => {
+  const {isLoggedIn} = useAppSelector(state => state.auth);
+
   return (
     <View
       style={{
@@ -68,29 +71,43 @@ const BottomBar: React.FC<BottomTabBarProps> = ({
               marginHorizontal: wp('0.5%'),
               justifyContent: 'center',
               alignItems: 'center',
+              display:
+                route.name == 'Favourites'
+                  ? isLoggedIn
+                    ? 'flex'
+                    : 'none'
+                  : 'flex',
             }}>
             {route.name == 'Home' ? (
               <IonIcon
                 name={isFocused ? 'home' : 'home-outline'}
                 size={hp('4%')}
-                color={resources.colors.primary}
+                color={
+                  isFocused ? resources.colors.primary : resources.colors.grey
+                }
               />
             ) : route.name == 'Favourites' ? (
               <IonIcon
                 name={isFocused ? 'heart' : 'heart-outline'}
                 size={hp('4%')}
-                color={resources.colors.primary}
+                color={
+                  isFocused ? resources.colors.primary : resources.colors.grey
+                }
               />
             ) : (
               <FAIcon
                 name={isFocused ? 'user' : 'user-o'}
                 size={isFocused ? hp('4%') : hp('3.5%')}
-                color={resources.colors.primary}
+                color={
+                  isFocused ? resources.colors.primary : resources.colors.grey
+                }
               />
             )}
             <Text
               style={{
-                color: isFocused ? '#673ab7' : '#222',
+                color: isFocused
+                  ? resources.colors.primary
+                  : resources.colors.dark_grey,
                 fontSize: hp('1.5%'),
                 fontWeight: '600',
                 letterSpacing: 0.5,

@@ -8,10 +8,10 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {useNavigation} from '@react-navigation/native';
-import {stackProps} from '../../navigators/types';
+import {compositeProps, stackProps} from '../../navigators/types';
 
 const WatchList = () => {
-  const navigation = useNavigation<stackProps>();
+  const navigation = useNavigation<compositeProps>();
 
   return (
     <SafeAreaView
@@ -22,7 +22,7 @@ const WatchList = () => {
       <SubHeader
         title="Watchlist"
         onPress={() => {
-          navigation.navigate('HomeScreen');
+          navigation.navigate('Home');
         }}
       />
 

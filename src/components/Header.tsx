@@ -5,8 +5,11 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import {useAppSelector} from '../redux/hooks';
 
 const Header = () => {
+  const {isLoggedIn, userData} = useAppSelector(state => state.auth);
+
   return (
     <View>
       <StatusBar backgroundColor={resources.colors.primary} />
@@ -27,7 +30,7 @@ const Header = () => {
             letterSpacing: 0.6,
             paddingLeft: wp('5%'),
           }}>
-          Hello User
+          {isLoggedIn ? `Hello ${userData.userName}` : 'Hello'}
         </Text>
       </View>
     </View>
